@@ -93,7 +93,7 @@ stpm2boot <- function(data,
               thisrmtldiff <- thisrmtl - thisrmtl[paste0("RMTL", rmtl[d], "_", event[e], ref[r])]
 
               names(thisrmtldiff) <- paste0("diff", rmtl[d], "_RMTL", event[e], group_names)
-              thisrmtldiff <- thisrmtldiff[setdiff(names(thisrmtldiff), paste0("diff", rmtl[d], "_RMTL", event[e], r))]
+              thisrmtldiff <- thisrmtldiff[setdiff(names(thisrmtldiff), paste0("diff", rmtl[d], "_RMTL", event[e], ref[r]))]
 
               rtmlCIF <- c(rtmlCIF, thisrmtl)
               rmtlDIFF <- c(rmtlDIFF, thisrmtldiff)
