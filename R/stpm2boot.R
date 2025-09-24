@@ -61,17 +61,18 @@ stpm2boot <- function(data,
                 dplyr::slice(1) %>%
                 dplyr::select(-`_newt`) %>%
                 dplyr::transmute(dplyr::across(
-                  .data[[paste0("CIF_", event[e], ref[r])]],
-                  ~ .data[[paste0("CIF_", event[e], group_names)]] - .x,
+                  tidyselect::all_of(paste0("CIF_", event[e], group_names)),
+                  ~ .x-.data[[paste0("CIF_", event[e], ref[r])]]  ,
                   .names = paste0("diff", diff[d], "_{.col}")
                 )) %>%
                 dplyr::mutate(dplyr::across(tidyselect::everything(), ~ as.numeric(.)))
-
+                thisdiff <- unlist(thisdiff)
+                thisdiff <-thisdiff[setdiff(names(thisdiff), paste0("diff", diff[d],"_CIF_", event[e], ref[r]))]
               diffCIF <- c(diffCIF, thisdiff)
             }
           }
         }
-        res <- unlist(diffCIF)
+        res <-diffCIF
       } else {
         res <- NULL
       }
