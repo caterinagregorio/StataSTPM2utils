@@ -85,7 +85,7 @@ stmp2boot <- function(data,
               thisrmtl <- get_cif %>%
                 dplyr::filter(`_newt` <= rmtl[d]) %>%
                 dplyr::select(-`_newt`) %>%
-                purr::map_dbl(~ trapz(na.omit(get_cif$`_newt`[get_cif$`_newt` <=
+                purrr::map_dbl(~ trapz(na.omit(get_cif$`_newt`[get_cif$`_newt` <=
                   rmtl[d]]), .))
               names(thisrmtl) <- paste0("RMTL", rmtl[d], "_", event[e], group_names)
 
