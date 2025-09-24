@@ -50,6 +50,7 @@ stpm2boot <- function(data,
         event, group_names, paste0
       ))))
       get_cif %<>% dplyr::select(tidyselect::any_of(select_cols))
+
       if (!is.null(diff)) {
         diffCIF <- c()
         for (e in 1:length(event)) {
@@ -70,7 +71,7 @@ stpm2boot <- function(data,
             }
           }
         }
-        res <- diffCIF
+        res <- unlist(diffCIF)
       } else {
         res <- NULL
       }
