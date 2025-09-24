@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of StataSTPM2utils is to ...
+The goal of StataSTPM2utils is to  obtain CIF, difference in CIF, and Restricted Mean Time Lost (RMTL) from a stpm2 Stata model with the possibility to run non-parametric bootstrap.
 
 ## Installation
 
