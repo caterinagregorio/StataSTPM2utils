@@ -1,0 +1,18 @@
+Package: StataSTPM2utils
+Type: Package
+Title: R Utils for Stpm2 from STATA
+Version: 0.1.0
+Author: Caterina Gregorio
+Maintainer: The package maintainer <caterina.gregorio@ki.se>
+Description: R Utils for Stpm2 from STATA
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    magrittr,
+    rlang,
+    RStata,
+    tidyr,
+    tidyselect
+RoxygenNote: 7.3.2
