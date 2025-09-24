@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-stmp2boot <- function(data,
+stpm2boot <- function(data,
                       i,
                       dat,
                       stata_code,
