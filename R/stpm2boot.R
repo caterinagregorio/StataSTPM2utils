@@ -10,6 +10,7 @@
 #' @param group_names Character vector specifying the names of the groups for CIF comparison
 #' @param event The event of interest for CIF and RMTL calculations
 #' @param ref Reference group for comparisons (default is 1)
+#' @param timevar String indicating time variable name for CIF (default to ".newt")
 #'
 #' @return
 #' @export
@@ -25,7 +26,8 @@ stpm2boot <- function(data,
                       rmtl = NULL,
                       group_names = c(),
                       event = c("dementia"),
-                      ref = 1) {
+                      ref = 1,
+                      timevar=".newt") {
   # checks
   if (!((stringr::str_match(
     sub(".*cause1\\(([^)]+)\\).*", "\\1", stata_code), event
@@ -46,7 +48,7 @@ stpm2boot <- function(data,
       # we execute the STATA code within R
       get_cif <- RStata::stata(stata_code, data.in = datai, data.out = T)
 
-      select_cols <- c("_newt", paste0("CIF_", as.vector(outer(
+      select_cols <- c(timevar, paste0("CIF_", as.vector(outer(
         event, group_names, paste0
       ))))
       get_cif %<>% dplyr::select(tidyselect::any_of(select_cols))
@@ -57,9 +59,9 @@ stpm2boot <- function(data,
           for (d in 1:length(diff)) {
             for (r in 1:length(ref)) {
               thisdiff <- get_cif %>%
-                dplyr::filter(`_newt` >= diff[d]) %>%
+                dplyr::filter(.data[[timevar]] >= diff[d]) %>%
                 dplyr::slice(1) %>%
-                dplyr::select(-`_newt`) %>%
+                dplyr::select(-.data[[timevar]]) %>%
                 dplyr::transmute(dplyr::across(
                   tidyselect::all_of(paste0("CIF_", event[e], group_names)),
                   ~ .x-.data[[paste0("CIF_", event[e], ref[r])]]  ,
@@ -85,9 +87,9 @@ stpm2boot <- function(data,
           for (d in 1:length(rmtl)) {
             for (r in 1:length(ref)) {
               thisrmtl <- get_cif %>%
-                dplyr::filter(`_newt` <= rmtl[d]) %>%
-                dplyr::select(-`_newt`) %>%
-                purrr::map_dbl(~ trapz(na.omit(get_cif$`_newt`[get_cif$`_newt` <=
+                dplyr::filter(.data[[timevar]] <= rmtl[d]) %>%
+                dplyr::select(-.data[[timevar]]) %>%
+                purrr::map_dbl(~ trapz(na.omit(get_cif$.data[[timevar]][get_cif$.data[[timevar]] <=
                   rmtl[d]]), .))
               names(thisrmtl) <- paste0("RMTL", rmtl[d], "_", event[e], group_names)
 
@@ -105,7 +107,7 @@ stpm2boot <- function(data,
       }
       if (cif) {
         cif_v <- get_cif %>%
-          dplyr::select(-`_newt`) %>%
+          dplyr::select(-.data[[timevar]]) %>%
           as.matrix() %>%
           as.vector()
         res <- c(res, cif_v)
@@ -118,4 +120,4 @@ stpm2boot <- function(data,
 
 
 
-utils::globalVariables(c("_newt"))
+# utils::globalVariables(c(timevar))

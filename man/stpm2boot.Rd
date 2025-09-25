@@ -15,7 +15,8 @@ stpm2boot(
   rmtl = NULL,
   group_names = c(),
   event = c("dementia"),
-  ref = 1
+  ref = 1,
+  timevar = ".newt"
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ stpm2boot(
 \item{event}{The event of interest for CIF and RMTL calculations}
 
 \item{ref}{Reference group for comparisons (default is 1)}
+
+\item{timevar}{String indicating time variable name for CIF (default to ".newt")}
 }
 \description{
 Function to obtain CIF, difference in CIF, and Restricted Mean Time Lost (RMTL) from a stpm2 Stata model
